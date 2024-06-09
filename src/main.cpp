@@ -22,10 +22,62 @@ int getDistance() {
   // and return the distance in centimeters
   // For example:
   digitalWrite(TRIGGER_PIN, HIGH);
-  delayMicroseconds(5);
+  delayMicroseconds(10);
   digitalWrite(TRIGGER_PIN, LOW);
   float duration = pulseIn(ECHO_PIN, HIGH);
   return (duration * 0.034) / 2;
+}
+
+// Function to set up the web server routes
+void setupServer() {
+  // Serve the HTML page
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    String html = R"(
+      <html>
+      <head>
+        <script>
+          function updateData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/data', true);
+            xhr.onload = function() {
+              if (xhr.status == 200) {
+                var data = JSON.parse(xhr.responseText);
+                document.getElementById('distance').innerText = data.distance + ' cm';
+                document.getElementById('led1').innerText = data.led1;
+                document.getElementById('led2').innerText = data.led2;
+                document.getElementById('led3').innerText = data.led3;
+              }
+            };
+            xhr.send();
+          }
+          setInterval(updateData, 500); // Update data every 500 ms
+        </script>
+      </head>
+      <body>
+        <h1>Park Sensor</h1>
+        <p>Distance: <span id='distance'></span></p>
+        <p>LED1: <span id='led1'></span></p>
+        <p>LED2: <span id='led2'></span></p>
+        <p>LED3: <span id='led3'></span></p>
+      </body>
+      </html>
+    )";
+    request->send(200, "text/html", html);
+  });
+
+  // Provide data in JSON format
+  server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request){
+    int distance = getDistance();
+    String json = "{";
+    json += "\"distance\":" + String(distance) + ",";
+    json += "\"led1\":" + String(digitalRead(LED1_PIN)) + ",";
+    json += "\"led2\":" + String(digitalRead(LED2_PIN)) + ",";
+    json += "\"led3\":" + String(digitalRead(LED3_PIN));
+    json += "}";
+    request->send(200, "application/json", json);
+  });
+
+  server.begin(); // Start the server
 }
 
 void setup() {
@@ -50,20 +102,8 @@ void setup() {
   }
   Serial.println("Connected to WiFi");
 
-  // Serve the HTML page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    String html = "<html><head><meta http-equiv='refresh' content='1'></head><body>";
-    html += "<h1>Park Sensor</h1>";
-    html += "<p>Distance: " + String(getDistance()) + " cm</p>";
-    html += "<p>LED1: " + String(digitalRead(LED1_PIN)) + "</p>";
-    html += "<p>LED2: " + String(digitalRead(LED2_PIN)) + "</p>";
-    html += "<p>LED3: " + String(digitalRead(LED3_PIN)) + "</p>";
-    html += "</body></html>";
-    request->send(200, "text/html", html);
-  });
-
-  // Start server
-  server.begin();
+  // Set up the web server
+  setupServer();
 }
 
 void loop() {
@@ -74,27 +114,27 @@ void loop() {
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, HIGH);
     tone(BUZZER_PIN, 1000);
-    delay(200);
+    delay(150);
     digitalWrite(LED1_PIN, LOW);
     digitalWrite(LED2_PIN, LOW);
     digitalWrite(LED3_PIN, LOW);
-    delay(200);
+    delay(150);
   } else if (distance < 10) {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, HIGH);
     tone(BUZZER_PIN, 1000); // Play tone at 1000 Hz
-    delay(150);
+    delay(100);
     noTone(BUZZER_PIN);
-    delay(150);
+    delay(100);
   } else if (distance < 20) {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, LOW);
     tone(BUZZER_PIN, 1000);
-    delay(300);
+    delay(250);
     noTone(BUZZER_PIN); // Stop the tone
-    delay(300);
+    delay(250);
   } else if (distance < 30) {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, LOW);
