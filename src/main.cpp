@@ -80,16 +80,20 @@ void setupServer() {
 }
 
 void setup() {
+  // Initialize Serial Monitor
   Serial.begin(115200);
-  
+
+  // Initialize digital pins as outputs
   pinMode(LED1_PIN, OUTPUT);
   pinMode(LED2_PIN, OUTPUT);
   pinMode(LED3_PIN, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
 
+  // Initialize ultrasonic sensor pins
   pinMode(TRIGGER_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
+  // Connect to Wi-Fi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -107,7 +111,7 @@ void loop() {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, HIGH);
-    tone(BUZZER_PIN, 1000);
+    tone(BUZZER_PIN, 1000); 
     delay(200);
     digitalWrite(LED1_PIN, LOW);
     digitalWrite(LED2_PIN, LOW);
@@ -117,7 +121,7 @@ void loop() {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, HIGH);
-    tone(BUZZER_PIN, 1000);
+    tone(BUZZER_PIN, 1000); // Play tone at 1000 Hz
     delay(150);
     noTone(BUZZER_PIN);
     delay(150);
@@ -127,7 +131,7 @@ void loop() {
     digitalWrite(LED3_PIN, LOW);
     tone(BUZZER_PIN, 1000);
     delay(300);
-    noTone(BUZZER_PIN);
+    noTone(BUZZER_PIN); // Stop the tone
     delay(300);
   } else if (distance < 30) {
     digitalWrite(LED1_PIN, HIGH);
@@ -135,13 +139,13 @@ void loop() {
     digitalWrite(LED3_PIN, LOW);
     tone(BUZZER_PIN, 1000);
     delay(500);
-    noTone(BUZZER_PIN);
+    noTone(BUZZER_PIN); // Stop the tone
     delay(500);
   } else {
     digitalWrite(LED1_PIN, LOW);
     digitalWrite(LED2_PIN, LOW);
     digitalWrite(LED3_PIN, LOW);
-    noTone(BUZZER_PIN);
+    noTone(BUZZER_PIN); // Stop the tone
     delay(1000);
   }
 }
