@@ -114,27 +114,27 @@ void loop() {
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, HIGH);
     tone(BUZZER_PIN, 1000);
-    delay(150);
+    delay(200);
     digitalWrite(LED1_PIN, LOW);
     digitalWrite(LED2_PIN, LOW);
     digitalWrite(LED3_PIN, LOW);
-    delay(150);
+    delay(200);
   } else if (distance < 10) {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, HIGH);
     tone(BUZZER_PIN, 1000); // Play tone at 1000 Hz
-    delay(100);
+    delay(150);
     noTone(BUZZER_PIN);
-    delay(100);
+    delay(150);
   } else if (distance < 20) {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, LOW);
     tone(BUZZER_PIN, 1000);
-    delay(250);
+    delay(300);
     noTone(BUZZER_PIN); // Stop the tone
-    delay(250);
+    delay(300);
   } else if (distance < 30) {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, LOW);
