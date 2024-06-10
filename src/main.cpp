@@ -50,7 +50,7 @@ void setupServer() {
             };
             xhr.send();
           }
-          setInterval(updateData, 200); // Update data every 500 ms
+          setInterval(updateData, 200); // Update data every 200 ms
         </script>
       </head>
       <body>
