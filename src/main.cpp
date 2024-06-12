@@ -3,7 +3,6 @@
 #include <ESPAsyncWebServer.h>
 #include "../config.h" 
 
-
 // Pins for ultrasonic sensor
 #define TRIGGER_PIN 5
 #define ECHO_PIN 18
@@ -20,18 +19,101 @@ AsyncWebServer server(80);
 int getDistance() {
   // Implement the logic to measure the distance using the ultrasonic sensor
   // and return the distance in centimeters
-  // For example:
+  digitalWrite(TRIGGER_PIN, LOW);
+  delayMicroseconds(2);
   digitalWrite(TRIGGER_PIN, HIGH);
-  delayMicroseconds(5);
+  delayMicroseconds(10);
   digitalWrite(TRIGGER_PIN, LOW);
   float duration = pulseIn(ECHO_PIN, HIGH);
   return (duration * 0.034) / 2;
 }
 
+// Function to set up the web server routes
+void setupServer() {
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    String html = R"(
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+          }
+          h1 {
+            color: #333;
+          }
+          p {
+            font-size: 24px;
+            margin: 10px 0;
+          }
+          #data {
+            display: inline-block;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
+          .label {
+            font-weight: bold;
+            color: #555;
+          }
+          .value {
+            font-size: 28px;
+            color: #222;
+          }
+        </style>
+        <script>
+          function updateData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/data', true);
+            xhr.onload = function() {
+              if (xhr.status == 200) {
+                var data = JSON.parse(xhr.responseText);
+                document.getElementById('distance').innerText = data.distance + ' cm';
+                document.getElementById('led1').innerText = data.led1 ? 'ON' : 'OFF';
+                document.getElementById('led2').innerText = data.led2 ? 'ON' : 'OFF';
+                document.getElementById('led3').innerText = data.led3 ? 'ON' : 'OFF';
+              }
+            };
+            xhr.send();
+          }
+          setInterval(updateData, 200); // Update data every 200 ms
+        </script>
+      </head>
+      <body>
+        <h1>Park Sensor</h1>
+        <div id="data">
+          <p><span class="label">Distance:</span> <span id='distance' class="value"></span></p>
+          <p><span class="label">LED1:</span> <span id='led1' class="value"></span></p>
+          <p><span class="label">LED2:</span> <span id='led2' class="value"></span></p>
+          <p><span class="label">LED3:</span> <span id='led3' class="value"></span></p>
+        </div>
+      </body>
+      </html>
+    )";
+    request->send(200, "text/html", html);
+  });
+
+  server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request){
+    int distance = getDistance();
+    String json = "{";
+    json += "\"distance\":" + String(distance) + ",";
+    json += "\"led1\":" + String(digitalRead(LED1_PIN)) + ",";
+    json += "\"led2\":" + String(digitalRead(LED2_PIN)) + ",";
+    json += "\"led3\":" + String(digitalRead(LED3_PIN));
+    json += "}";
+    request->send(200, "application/json", json);
+  });
+
+  server.begin(); // Start the server
+}
+
 void setup() {
   // Initialize Serial Monitor
   Serial.begin(115200);
-  
+
   // Initialize digital pins as outputs
   pinMode(LED1_PIN, OUTPUT);
   pinMode(LED2_PIN, OUTPUT);
@@ -50,30 +132,17 @@ void setup() {
   }
   Serial.println("Connected to WiFi");
 
-  // Serve the HTML page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    String html = "<html><head><meta http-equiv='refresh' content='1'></head><body>";
-    html += "<h1>Park Sensor</h1>";
-    html += "<p>Distance: " + String(getDistance()) + " cm</p>";
-    html += "<p>LED1: " + String(digitalRead(LED1_PIN)) + "</p>";
-    html += "<p>LED2: " + String(digitalRead(LED2_PIN)) + "</p>";
-    html += "<p>LED3: " + String(digitalRead(LED3_PIN)) + "</p>";
-    html += "</body></html>";
-    request->send(200, "text/html", html);
-  });
-
-  // Start server
-  server.begin();
+  setupServer();
 }
 
 void loop() {
   int distance = getDistance();
 
-  if(0 < distance &&  distance < 5){
+  if (0 < distance && distance < 5) {
     digitalWrite(LED1_PIN, HIGH);
     digitalWrite(LED2_PIN, HIGH);
     digitalWrite(LED3_PIN, HIGH);
-    tone(BUZZER_PIN, 1000);
+    tone(BUZZER_PIN, 1000); 
     delay(200);
     digitalWrite(LED1_PIN, LOW);
     digitalWrite(LED2_PIN, LOW);
