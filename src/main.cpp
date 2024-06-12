@@ -19,10 +19,6 @@ AsyncWebServer server(80);
 int getDistance() {
   // Implement the logic to measure the distance using the ultrasonic sensor
   // and return the distance in centimeters
-<<<<<<< HEAD
-=======
-  // For example:
->>>>>>> 31621c21f81e0d0509da280369cb3f5eca2a5086
   digitalWrite(TRIGGER_PIN, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIGGER_PIN, HIGH);
@@ -38,7 +34,6 @@ void setupServer() {
     String html = R"(
       <html>
       <head>
-<<<<<<< HEAD
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -69,8 +64,6 @@ void setupServer() {
             color: #222;
           }
         </style>
-=======
->>>>>>> 31621c21f81e0d0509da280369cb3f5eca2a5086
         <script>
           function updateData() {
             var xhr = new XMLHttpRequest();
@@ -91,19 +84,12 @@ void setupServer() {
       </head>
       <body>
         <h1>Park Sensor</h1>
-<<<<<<< HEAD
         <div id="data">
           <p><span class="label">Distance:</span> <span id='distance' class="value"></span></p>
           <p><span class="label">LED1:</span> <span id='led1' class="value"></span></p>
           <p><span class="label">LED2:</span> <span id='led2' class="value"></span></p>
           <p><span class="label">LED3:</span> <span id='led3' class="value"></span></p>
         </div>
-=======
-        <p>Distance: <span id='distance'></span></p>
-        <p>LED1: <span id='led1'></span></p>
-        <p>LED2: <span id='led2'></span></p>
-        <p>LED3: <span id='led3'></span></p>
->>>>>>> 31621c21f81e0d0509da280369cb3f5eca2a5086
       </body>
       </html>
     )";
@@ -194,7 +180,3 @@ void loop() {
     delay(1000);
   }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 31621c21f81e0d0509da280369cb3f5eca2a5086
