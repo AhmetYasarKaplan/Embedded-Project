@@ -34,12 +34,22 @@ void setupServer() {
     String html = R"(
       <html>
       <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Park Sensor</title>
           <style>
-          body {
+          @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+          * {
+            font-family: "Nunito", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: regular;
+            font-style: normal;
+          }
+          body:not(footer) {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
-            padding: 50px;
+            padding-top: 50px;
           }
           h1 {
             color: #333;
@@ -106,6 +116,19 @@ void setupServer() {
           .value {
             font-size: 28px;
             color: #222;
+          }
+          footer {
+            background-color: silver;
+            position: absolute;
+            bottom: 0;
+            left: 0px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          footer p {
+            font-size: 20px;
           }
         </style>
         <script>
@@ -174,9 +197,7 @@ void setupServer() {
           </div>
         </div>
         <footer>
-          Copyright© 
           <p>Contributors: Ahmet Yaşar Kaplan, Abdullah Öztoprak, Baran Parmak</p>
-          <p><a href="https://github.com/AhmetYasarKaplan/Embedded-Project">Github Repo</a></p>
         </footer>
       </body>
       </html>
