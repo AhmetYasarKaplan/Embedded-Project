@@ -34,7 +34,7 @@ void setupServer() {
     String html = R"(
       <html>
       <head>
-        <style>
+          <style>
           body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -48,12 +48,56 @@ void setupServer() {
             font-size: 24px;
             margin: 10px 0;
           }
+          .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+          }
+          .bulb-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 20px;
+            position: relative;
+          }
+          #bulb1,
+          #bulb2,
+          #bulb3 {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background-color: grey;
+            border: 2px solid rgb(61, 61, 61);
+            margin-bottom: 0px;
+            position: relative;
+          }
+          button {
+            margin-top: -10px;
+            padding: 10px 10px;
+            background-color: silver;
+            font-size: large;
+            border: 2px solid gray;
+            cursor: pointer;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            color: silver;
+          }
+          .btn-end {
+            margin-top: 0px;
+            height: 11px;
+            width: 18px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            background-color: rgb(63, 63, 61);
+          }
           #data {
             display: inline-block;
             padding: 20px;
             border-radius: 10px;
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
           }
           .label {
             font-weight: bold;
@@ -75,6 +119,16 @@ void setupServer() {
                 document.getElementById('led1').innerText = data.led1 ? 'ON' : 'OFF';
                 document.getElementById('led2').innerText = data.led2 ? 'ON' : 'OFF';
                 document.getElementById('led3').innerText = data.led3 ? 'ON' : 'OFF';
+               
+                if(data.distance<5 && data.distance > 0){
+                  document.getElementById('bulb1').style.backgroundColor = data.led1 ? 'red' : 'grey';
+                  document.getElementById('bulb2').style.backgroundColor = data.led2 ? 'red' : 'grey';
+                  document.getElementById('bulb3').style.backgroundColor = data.led3 ? 'red' : 'grey';
+                }else{
+                  document.getElementById('bulb1').style.backgroundColor = data.led1 ? 'yellow' : 'grey';
+                  document.getElementById('bulb2').style.backgroundColor = data.led2 ? 'yellow' : 'grey';
+                  document.getElementById('bulb3').style.backgroundColor = data.led3 ? 'yellow' : 'grey';
+                }
               }
             };
             xhr.send();
@@ -85,10 +139,39 @@ void setupServer() {
       <body>
         <h1>Park Sensor</h1>
         <div id="data">
-          <p><span class="label">Distance:</span> <span id='distance' class="value"></span></p>
-          <p><span class="label">LED1:</span> <span id='led1' class="value"></span></p>
-          <p><span class="label">LED2:</span> <span id='led2' class="value"></span></p>
-          <p><span class="label">LED3:</span> <span id='led3' class="value"></span></p>
+          <p>
+            <span class="label">Distance:</span>
+            <span id="distance" class="value"></span>
+          </p>
+          <div class="container">
+            <div class="bulb-container">
+              <div id="bulb1"></div>
+              <button>ON</button>
+              <div class="btn-end"></div>
+              <p>
+                <span class="label">LED1:</span>
+                <span id="led1" class="value"></span>
+              </p>
+            </div>
+            <div class="bulb-container">
+              <div id="bulb2"></div>
+              <button>ON</button>
+              <div class="btn-end"></div>
+              <p>
+                <span class="label">LED2:</span>
+                <span id="led2" class="value"></span>
+              </p>
+            </div>
+            <div class="bulb-container">
+              <div id="bulb3"></div>
+              <button>ON</button>
+              <div class="btn-end"></div>
+              <p>
+                <span class="label">LED3:</span>
+                <span id="led3" class="value"></span>
+              </p>
+            </div>
+          </div>
         </div>
       </body>
       </html>
