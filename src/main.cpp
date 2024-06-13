@@ -173,6 +173,11 @@ void setupServer() {
             </div>
           </div>
         </div>
+        <footer>
+          Copyright© 
+          <p>Contributors: Ahmet Yaşar Kaplan, Abdullah Öztoprak, Baran Parmak</p>
+          <p><a href="https://github.com/AhmetYasarKaplan/Embedded-Project">Github Repo</a></p>
+        </footer>
       </body>
       </html>
     )";

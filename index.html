@@ -2,11 +2,18 @@
 <html>
   <head>
     <style>
-      body {
+      @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+      * {
+        font-family: "Nunito", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: regular;
+        font-style: normal;
+      }
+      body:not(footer) {
         font-family: Arial, sans-serif;
         background-color: #f0f0f0;
         text-align: center;
-        padding: 50px;
+        padding-top: 50px;
       }
       h1 {
         color: #333;
@@ -74,6 +81,19 @@
         font-size: 28px;
         color: #222;
       }
+      footer {
+        background-color: silver;
+        position: absolute;
+        bottom: 0;
+        left: 0px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      footer p {
+        font-size: 20px;
+      }
     </style>
   </head>
   <body>
@@ -113,5 +133,8 @@
         </div>
       </div>
     </div>
+    <footer>
+      <p>Contributors: Ahmet Yaşar Kaplan, Abdullah Öztoprak, Baran Parmak</p>
+    </footer>
   </body>
 </html>
